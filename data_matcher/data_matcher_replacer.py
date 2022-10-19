@@ -1,8 +1,8 @@
-from tools import query_helper, write_data
 import json
 import os
 import sys
 sys.path.append(os.path.join(os.getcwd(), '..', 'tools'))
+from tools import query_helper, write_data
 
 
 group_board_id = 3000198537
