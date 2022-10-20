@@ -1,4 +1,5 @@
 *.txt
 temp
+db
 data
 config.py
