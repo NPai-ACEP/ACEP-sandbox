@@ -2,13 +2,13 @@ import json
 import os
 import sys
 cur_dir = os.path.dirname(__file__)
-helper_dir = os.path.join(cur_dir,'..','tools')
+helper_dir = os.path.join(cur_dir, '..', 'tools')
 sys.path.append(helper_dir)
-from config import ed_data_feed_board_id,reporting_plan_2022_spreadsheet
+from config import status_board_id,reporting_plan_2022_spreadsheet
 from tools import query_helper,write_data
 
-ed_data_feed_ingest = query_helper('query ($board_id: Int!) {boards(ids: [$board_id]) {items {name id}}}', {'board_id':ed_data_feed_board_id})
-ed_data_feed_data = ed_data_feed_ingest['data']['boards'][0]['items']
+status_ingest = query_helper('query ($board_id: Int!) {boards(ids: [$board_id]) {items {name id}}}', {'board_id':ed_data_feed_board_id})
+status_dict = ed_data_feed_ingest['data']['boards'][0]['items']
 reporting_plan_2022 = reporting_plan_2022_spreadsheet.active
 mips_db = []
 mips_db_value = []
@@ -19,29 +19,21 @@ for row in range(1, reporting_plan_2022.max_row):
     mips_db_value = []
 
 for mips_db_row in mips_db:
-    for ed_data_feed_values in ed_data_feed_data:
-        if mips_db_row[3].casefold() == ed_data_feed_values['name'].casefold():
+    for status_list in status_dict:
+        if mips_db_row[3].casefold() == status_list['name'].casefold():
             group_id = str(mips_db_row[1])
             mips_status = mips_db_row[4]
-            col_id = "status4"
+            col_id = "status"
             query_helper('mutation ($board_id:Int!,$item_id:Int!,$col_val: JSON!) { change_multiple_column_values(item_id: $item_id, board_id: $board_id, column_values: $col_val){id}}', {
-                "board_id": ed_data_feed_board_id,
-                "item_id": int(ed_data_feed_values['id']),
+                "board_id": status_board_id,
+                "item_id": int(status_list['id']),
                 "col_val": json.dumps(
                     {col_id: {"label": mips_status}}
-                ),
-            })
-            col_id = "numbers47"
-            query_helper('mutation ($board_id:Int!,$item_id:Int!,$col_val: JSON!) { change_multiple_column_values(item_id: $item_id, board_id: $board_id, column_values: $col_val){id}}', {
-                "board_id": ed_data_feed_board_id,
-                "item_id": int(ed_data_feed_values['id']),
-                "col_val": json.dumps(
-                    {col_id: group_id}
                 ),
             })
             print(mips_db_row[3])
             break
 
-write_data(ed_data_feed_ingest=ed_data_feed_ingest,
+write_data(status_ingest=status_ingest,
            ed_data_feed_data=ed_data_feed_data,
            mips_db=mips_db)

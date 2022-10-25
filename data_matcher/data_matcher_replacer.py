@@ -2,7 +2,7 @@ import json
 import os
 import sys
 cur_dir = os.path.dirname(__file__)
-helper_dir = os.path.join(cur_dir, 'db')
+helper_dir = os.path.join(cur_dir, '..', 'tools')
 sys.path.append(helper_dir)
 from config import (group_accounts_board_id, backup_ed_sites_board_id, ed_sites_board_id)
 from tools import query_helper, write_data
