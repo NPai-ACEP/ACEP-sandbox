@@ -20,3 +20,10 @@ def query_helper(query, variables, silent=1):
         print(data)
         print(r.json())
     return r.json()
+
+def titlecase_formater(item_list):
+    new_item_list = []
+    for item in item_list:
+        new_item_name = item['name'].title()
+        new_item_list.append([new_item_name, int(item['id'])])
+    return new_item_list
