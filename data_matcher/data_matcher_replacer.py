@@ -59,8 +59,7 @@ connect_new_id = [
                 "group_val": json.dumps(
                     {col_id: {"item_ids": list(groups_ids[group_name])}}
                 ),
-            },
-            0
+            }
         )
         for group_name in groups_ids
         if group_id["name"].casefold() in group_name.casefold()
