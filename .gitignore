@@ -133,6 +133,5 @@ dmypy.json
 # Workspace specific files
 *.txt
 temp
-db
 data
 config.py

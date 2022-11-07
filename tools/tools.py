@@ -1,10 +1,9 @@
-import os.path
-
-import config
+import os
 import requests
+from config import api_key_monday
 
 api_url = "https://api.monday.com/v2"
-headers = {"Authorization": config.api_key_monday}
+headers = {"Authorization": api_key_monday}
 
 
 def write_data(**all_data):
@@ -15,10 +14,11 @@ def write_data(**all_data):
             print(data_item, file=f)
 
 
-def query_helper(query, variables, silent=1):
+def query_helper(query, variables, loud=False):
     data = {'query': query, 'variables': variables}
+    
     r = requests.post(url=api_url, json=data, headers=headers)
-    if silent is False:
+    if loud is True:
         print(data)
         print(r.json())
     return r.json()
