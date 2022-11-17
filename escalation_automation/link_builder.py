@@ -1,10 +1,11 @@
 import json
 import os
 import sys
+
 cur_dir = os.path.dirname(__file__)
-helper_dir = os.path.join(cur_dir, '..', 'tools')
+helper_dir = os.path.join(cur_dir, "..", "tools")
 sys.path.append(helper_dir)
-from config import (acep_monday_url, sandbox_board_id)
+from config import acep_monday_url, sandbox_board_id
 from tools import query_helper
 
 
@@ -47,7 +48,6 @@ for item_id, item_name, item_url in items_url:
         {
             "board_id": sandbox_board_id,
             "item_id": item_id,
-            "link_val": json.dumps({
-                col_id: {"url": item_url, "text": item_name}}),
+            "link_val": json.dumps({col_id: {"url": item_url, "text": item_name}}),
         },
     )

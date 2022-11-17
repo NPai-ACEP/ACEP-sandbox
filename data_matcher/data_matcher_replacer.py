@@ -1,27 +1,28 @@
 import json
 import os
 import sys
+
 cur_dir = os.path.dirname(__file__)
-helper_dir = os.path.join(cur_dir, '..', 'tools')
+helper_dir = os.path.join(cur_dir, "..", "tools")
 sys.path.append(helper_dir)
-from config import (group_accounts_board_id, backup_ed_sites_board_id, ed_sites_board_id)
+from config import group_accounts_board_id, backup_ed_sites_board_id, ed_sites_board_id
 from tools import query_helper, write_data
 
 group_ingest = query_helper(
     "query($board_id:Int!) {boards(ids:[$board_id]){items {name id}}}",
-    {"board_id": group_accounts_board_id}
-    )
+    {"board_id": group_accounts_board_id},
+)
 group_data = group_ingest["data"]["boards"][0]["items"]
 
 backup_group_ingest = query_helper(
     'query($board_id:Int!) {boards(ids:[$board_id]){items {name column_values(ids: "connect_boards") {text}}}}',
-    {"board_id": backup_ed_sites_board_id}
+    {"board_id": backup_ed_sites_board_id},
 )
 backup_group_data = backup_group_ingest["data"]["boards"][0]["items"]
 
 sites_ingest = query_helper(
     "query($board_id:Int!) {boards(ids:[$board_id]){items {name id}}}",
-    {"board_id": ed_sites_board_id}
+    {"board_id": ed_sites_board_id},
 )
 sites_data = sites_ingest["data"]["boards"][0]
 
@@ -59,7 +60,7 @@ connect_new_id = [
                 "group_val": json.dumps(
                     {col_id: {"item_ids": list(groups_ids[group_name])}}
                 ),
-            }
+            },
         )
         for group_name in groups_ids
         if group_id["name"].casefold() in group_name.casefold()
