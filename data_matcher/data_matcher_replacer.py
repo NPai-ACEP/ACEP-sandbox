@@ -5,12 +5,12 @@ import sys
 cur_dir = os.path.dirname(__file__)
 helper_dir = os.path.join(cur_dir, "..", "tools")
 sys.path.append(helper_dir)
-from config import group_accounts_board_id, backup_ed_sites_board_id, ed_sites_board_id
+from config import ed_mgmt_board_id, backup_ed_sites_board_id, ed_sites_board_id
 from tools import query_helper, write_data
 
 group_ingest = query_helper(
     "query($board_id:Int!) {boards(ids:[$board_id]){items {name id}}}",
-    {"board_id": group_accounts_board_id},
+    {"board_id": ed_mgmt_board_id},
 )
 group_data = group_ingest["data"]["boards"][0]["items"]
 
@@ -55,7 +55,7 @@ connect_new_id = [
         query_helper(
             "mutation ($board_id:Int!,$item_id:Int!,$group_val: JSON!) { change_multiple_column_values(item_id: $item_id, board_id: $board_id, column_values: $group_val){id}}",
             {
-                "board_id": group_accounts_board_id,
+                "board_id": ed_mgmt_board_id,
                 "item_id": int(group_id["id"]),
                 "group_val": json.dumps(
                     {col_id: {"item_ids": list(groups_ids[group_name])}}

@@ -10,7 +10,7 @@ from tools import query_helper
 
 group_ingest = query_helper(
     'query($board_id:Int!) {boards(ids:[$board_id]){items {name column_values(ids:["text8"]){text}}}}',
-    {"board_id": config.group_accounts_board_id},
+    {"board_id": config.ed_mgmt_board_id},
 )
 group_data = group_ingest["data"]["boards"][0]["items"]
 
